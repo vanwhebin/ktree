@@ -5,8 +5,11 @@ import App from './App'
 import router from './router'
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
+import FastClick from 'fastclick'
 
 Vue.use(Antd)
+
+FastClick.attach(document.body)
 
 Vue.config.productionTip = false
 
