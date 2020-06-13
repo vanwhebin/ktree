@@ -29,7 +29,7 @@ export default {
         id: 'wx_reg',
         appid: 'ww0f3efc2873ad11c3',
         agentid: '1000036',
-        redirect_uri: 'http://review.freebie-queen.com/api/v1/user/login/wx',
+        redirect_uri: 'http://review.freebie-queen.com/api/v1/login',
         state: 'reviewer@aukey',
         href: 'data:text/css;base64,LmltcG93ZXJCb3ggLnFyY29kZSB7d2lkdGg6IDIwMHB4O30NCi5pbXBvd2VyQm94IC50aXRsZSB7ZGlzcGxheTogbm9uZTt9DQouaW1wb3dlckJveCAuaW5mbyB7d2lkdGg6IDIwMHB4O30NCi5zdGF0dXNfaWNvbiB7ZGlzcGxheTogbm9uZX0NCi5pbXBvd2VyQm94IC5zdGF0dXMge3RleHQtYWxpZ246IGNlbnRlcjt9'
       }
