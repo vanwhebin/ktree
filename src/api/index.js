@@ -2,7 +2,7 @@ import qs from 'qs'
 import axios from 'axios'
 import { getStore } from '../utils/storage'
 // import { getStore } from 'utils/storage'
-const token = getStore('token')
+const token = getStore('token') ? getStore('token') : ' '
 // 引用axios
 axios.defaults.baseURL = process.env.API_HOST
 axios.defaults.timeout = 20000
@@ -16,7 +16,7 @@ function apiAxios (method, url, params) {
     axios({
       method: method,
       url: url,
-      headers: {Authorization: 'Bearer ' + token},
+      // headers: {Authorization: 'Bearer ' + token},
       data: method === 'POST' || method === 'PUSH' ? params : null,
       params: method === 'GET' || method === 'DELETE' ? params : null,
       withCredentials: false
@@ -30,6 +30,9 @@ function apiAxios (method, url, params) {
 
 axios.interceptors.request.use(function (config) {
   // 配置config
+  if (token) {
+    config.headers.Authorization = 'Bearer ' + token
+  }
   config.headers.Accept = 'application/json'
   // let useId = getStore('user_id')
   // let useEmail = getStore('user_email')
