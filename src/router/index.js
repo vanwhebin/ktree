@@ -1,10 +1,18 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/components/Home'
-import VoteIndex from '@/components/VoteIndex'
-import VoteList from '@/components/VoteList'
-import VoteDetail from '@/components/VoteDetail'
-import Start from '@/components/Start'
+// import Home from '@/pages/Home'
+// import VoteIndex from '@/pages/vote/VoteIndex'
+// import VoteList from '@/pages/vote/VoteList'
+// import VoteDetail from '@/pages/vote/VoteDetail'
+// import Loading from '@/pages/hackthon/Loading'
+// import Score from '@/pages/hackthon/Score'
+import Login from '@/pages/Login'
+import Programs from '@/pages/hackthon/List'
+import Index from '@/pages/hackthon/Index'
+import Statistics from '@/pages/hackthon/Statistics'
+import Submit from '@/pages/hackthon/Submit'
+import Score from '@/pages/hackthon/Score'
+import Start from '@/pages/Start'
 
 Vue.use(Router)
 
@@ -14,7 +22,7 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Index
     },
     {
       path: '/start',
@@ -22,19 +30,44 @@ export default new Router({
       component: Start
     },
     {
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
+    // {
+    //   path: '/programs',
+    //   name: 'vote-list',
+    //   component: VoteList
+    // },
+    // {
+    //   path: '/program/:id',
+    //   name: 'vote-program',
+    //   component: VoteDetail
+    // },
+    {
       path: '/vote',
       name: 'vote',
-      component: VoteIndex
+      component: Submit
     },
+    // {
+    //   path: '/vote',
+    //   name: 'vote',
+    //   component: Submit
+    // },
     {
       path: '/programs',
-      name: 'vote-list',
-      component: VoteList
+      name: 'programs',
+      component: Programs
+    },
+    {
+      path: '/program/statistics',
+      name: 'statistics',
+      component: Statistics
     },
     {
       path: '/program/:id',
-      name: 'vote-program',
-      component: VoteDetail
+      name: 'program',
+      component: Score
     }
   ]
 })

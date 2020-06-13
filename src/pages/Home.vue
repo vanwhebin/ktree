@@ -18,7 +18,7 @@
           </a-menu>
         </div>
         <div class="right-menu">
-          <button type="button" class="reser-btn ant-btn"><span>放码过来</span></button>
+          <button type="button" class="reser-btn ant-btn" @click="start"><span>放码过来</span></button>
         </div>
       </div>
 
@@ -278,6 +278,11 @@ export default {
   methods: {
     onChange (val) {
       console.log(val)
+    },
+    start () {
+      this.$router.push(
+        {name: 'start'}
+      )
     }
   }
 }
@@ -415,9 +420,7 @@ export default {
   .foot-nav h2{
     color: #9ba5b4;
   }
-
   /*---------!footer-------------*/
-
   .content-layout {
     margin: auto;
     margin-top: 24px;
@@ -449,13 +452,6 @@ export default {
   .ant-carousel >>> .slick-slide h3 {
     color: #fff;
   }
-
-  /*.ant-carousel >>> .slick-slide img {*/
-    /*width: 100%;*/
-    /*max-width: 1200px;*/
-    /*max-height:800px;*/
-  /*}*/
-
   .ant-menu-horizontal {
     line-height: 52px !important;
   }

@@ -6,6 +6,7 @@ import router from './router'
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 import FastClick from 'fastclick'
+require('./assets/scripts/lib-flexible-min.js')
 
 Vue.use(Antd)
 
