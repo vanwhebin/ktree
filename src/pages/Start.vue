@@ -3,12 +3,12 @@
     <a-layout-header class="layout-header p-header">
       <div class="menu">
         <div class="left-menu">
-          <div class="logo"></div>
+          <div class="logo" @click="$router.push({name: 'home'})"></div>
           <a-menu
             theme="light"
             mode="horizontal"
           >
-            <a-menu-item key="1">
+            <a-menu-item key="1" @click="$router.push({name: 'home'})">
               首页
             </a-menu-item>
           </a-menu>
@@ -22,20 +22,34 @@
       <div class="content-box">
 
         <a-card>
-          <a-form layout="vertical">
+          <a-form layout="vertical" :form="form">
+            <a-form-item label="当前活动">
+              <a-input placeholder="项目标题内容" disabled :value="campaign.title">
+              </a-input>
+            </a-form-item>
             <a-form-item label="项目标题">
-              <a-input placeholder="项目标题内容"></a-input>
+              <a-input placeholder="项目标题内容"
+                       v-decorator="['title', { rules: [{required: true, message: '请提供简要标题'}] }]">
+              </a-input>
             </a-form-item>
             <a-form-item label="项目描述">
-              <a-textarea placeholder="项目具体实现功能点" rows="5"></a-textarea>
+              <a-textarea
+                placeholder="项目具体实现功能点"
+                rows="5"
+                v-decorator="['desc', { rules: [{required: true, message: '请简单描述项目内容'}] }]"
+              >
+              </a-textarea>
+            </a-form-item>
+            <a-form-item label="其他材料">
+              <a-textarea rows="3" v-decorator="['memo']"></a-textarea>
             </a-form-item>
             <a-form-item label="团队成员" has-feedback>
               <a-select
-                v-model="team"
                 mode="multiple"
                 style="width: 100%"
                 placeholder="请选择团队成员"
                 option-label-prop="label"
+                v-decorator="['team', { rules: [{required: true, message: '请选择团队成员'}] }]"
                 @change="changeTeam"
               >
                 <a-select-option v-for="(user, ind) in users" :value="user.id" :key="ind" :label="user.name" >
@@ -44,27 +58,45 @@
               </a-select>
             </a-form-item>
             <a-row :gutter="24">
-              <a-col :span="8">
-                <a-form-item label="产品" has-feedback v-model="selectedUsers">
-                  <a-select >
+              <a-col :span="4">
+                <a-form-item label="产品人员" has-feedback>
+                  <a-select v-decorator="['product', { rules: [{required: true, message: '请选择产品'}] }]">
                     <a-select-option v-for="(user, ind) in team" :value="user.id" :key="ind" :label="user.name">
                       {{user.name}}
                     </a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
-              <a-col :span="8">
-                <a-form-item label="开发" has-feedback >
-                  <a-select >
+              <a-col :span="4">
+                <a-form-item label="设计人员" has-feedback>
+                  <a-select v-decorator="['design']">
                     <a-select-option v-for="(user, ind) in team" :value="user.id" :key="ind" :label="user.name">
                       {{user.name}}
                     </a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
-              <a-col :span="8">
-                <a-form-item label="测试" has-feedback>
-                  <a-select >
+              <a-col :span="7">
+                <a-form-item label="开发人员" has-feedback>
+                  <a-select mode="multiple" v-decorator="['develop', { rules: [{required: true, message: '请选择开发人员'}] }]">
+                    <a-select-option v-for="(user, ind) in team" :value="user.id" :key="ind" :label="user.name">
+                      {{user.name}}
+                    </a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :span="4">
+                <a-form-item label="测试人员" has-feedback>
+                  <a-select v-decorator="['test']">
+                    <a-select-option v-for="(user, ind) in team" :value="user.id" :key="ind" :label="user.name">
+                      {{user.name}}
+                    </a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :span="5">
+                <a-form-item label="评分人员" has-feedback>
+                  <a-select v-decorator="['rating', { rules: [{required: true, message: '请选择评分人员'}] }]">
                     <a-select-option v-for="(user, ind) in team" :value="user.id" :key="ind" :label="user.name">
                       {{user.name}}
                     </a-select-option>
@@ -77,13 +109,9 @@
             </a-form-item>
           </a-form>
         </a-card>
-        <div >
-          <e-charts ref="pie" :options="polar"></e-charts>
-          <e-charts ref="bar" :options="orgOptions" :auto-resize="true"></e-charts>
-        </div>
       </div>
     </a-layout-content>
-    <a-layout-footer class="layout-footer">
+    <a-layout-footer class="layout-footer" style="margin-top: 30px">
       <div class="footer-content">
         <div class="footer-left">
           <div class="foot-nav" style="color:#9ba5b4;width:300px">
@@ -130,79 +158,28 @@
 </template>
 
 <script>
-import ECharts from 'vue-echarts'
-import 'echarts/lib/chart/pie'
-import 'echarts/lib/chart/bar'
-import 'echarts/lib/component/tooltip'
-import 'echarts/lib/component/title'
-import { postProgram, getUsers } from '@/api/api'
+import { postProgram, getUsers, getLatestCampaign } from '@/api/api'
+import { setStore } from '@/utils/storage'
+import config from '@/config'
 export default {
   name: 'Start',
-  components: {
-    ECharts
-  },
   data () {
     return {
+      form: this.$form.createForm(this),
       formLayout: 'vertical',
-      polar: {
-        title: {
-          text: '会员数据统计',
-          subtext: '动态数据',
-          x: 'center'
-        },
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
-        },
-        legend: {
-          show: true,
-          orient: 'vertical',
-          left: 'left',
-          data: ['微信访问', '公众号访问', '扫码进入', '分享进入', '搜索访问']
-        },
-        series: [
-          {
-            name: '访问来源',
-            type: 'pie',
-            radius: '55%',
-            center: ['50%', '60%'],
-            data: [
-              {value: 335, name: '微信访问'},
-              {value: 310, name: '公众号访问'},
-              {value: 234, name: '扫码进入'},
-              {value: 135, name: '分享进入'},
-              {value: 1548, name: '搜索访问'}
-            ],
-            itemStyle: {
-              emphasis: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              }
-            }
-          }
-        ]
-      },
-      orgOptions: {
-        title: {
-          text: 'ECharts 入门示例',
-          subtext: '动态数据',
-          x: 'center'
-        },
-        tooltip: {},
-        xAxis: {
-          data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
-        },
-        yAxis: {},
-        series: [{
-          name: '销量',
-          type: 'bar',
-          data: [5, 20, 36, 10, 10, 20]
-        }]
-      },
       users: [],
-      selectedUsers: [],
-      team: []
+      selectedUsers: {
+        product: {},
+        develop: {},
+        test: {},
+        rating: {}
+      },
+      teamUserID: [],
+      team: [],
+      campaign: {
+        title: '',
+        UID: ''
+      }
     }
   },
   mounted () {
@@ -211,48 +188,43 @@ export default {
   methods: {
     init () {
       getUsers().then((res) => {
-        // console.log(res)
+        console.log(res)
         this.users = res.data
+      })
+      getLatestCampaign().then((res) => {
+        console.log(res)
+        this.campaign.title = res.data.title
+        this.campaign.UID = res.data.uuid
+        setStore(config.campaignRef, res.data.uuid)
       })
     },
     changeTeam (selected) {
       console.log(selected)
-      // console.log(this.selectedUsers)
       const _this = this
       selected.forEach(function (item) {
-        // if () {
-        // }
-        // this.team.push()
-        console.log(item)
         for (let i = 0; i < _this.users.length; i++) {
-          if (_this.users[i].id === item) {
+          if (_this.users[i].id === item && _this.teamUserID.indexOf(item) === -1) {
+            _this.teamUserID.push(item)
             _this.team.push(_this.users[i])
           }
         }
       })
       console.log(this.team)
     },
-    initCharts () {
-      this.orgOptions = {
-        title: {
-          text: 'ECharts 入门示例'
-        },
-        tooltip: {},
-        xAxis: {
-          data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
-        },
-        yAxis: {},
-        series: [{
-          name: '销量',
-          type: 'bar',
-          data: [5, 20, 36, 10, 10, 20]
-        }]
-      }
-    },
     onSubmit () {
-      const data = {hello: 'hell', test: 'test'}
-      postProgram(data).then((res) => {
-        console.log(res)
+      const _this = this
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          console.log(values)
+          const data = Object.assign({}, values, { campaignUID: _this.campaign.UID, develop: values['develop'].join(',') })
+          postProgram(data).then((res) => {
+            console.log(res)
+            if (!res.code) {
+              _this.$message.success('创建成功')
+              _this.form.resetFields()
+            }
+          })
+        }
       })
     }
   }
@@ -297,6 +269,10 @@ export default {
 
   .left-menu ul {
     margin-left: 20px;
+  }
+
+  .left-menu ul li{
+    padding-top: 5px;
   }
 
   .p-header .left-menu {

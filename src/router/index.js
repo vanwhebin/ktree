@@ -1,18 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import Home from '@/pages/Home'
+import Home from '@/pages/Home'
 // import VoteIndex from '@/pages/vote/VoteIndex'
-// import VoteList from '@/pages/vote/VoteList'
-// import VoteDetail from '@/pages/vote/VoteDetail'
-// import Loading from '@/pages/hackthon/Loading'
-// import Score from '@/pages/hackthon/Score'
-import Login from '@/pages/Login'
-import Programs from '@/pages/hackthon/List'
-import Index from '@/pages/hackthon/Index'
-import Statistics from '@/pages/hackthon/Statistics'
-import Submit from '@/pages/hackthon/Submit'
-import Score from '@/pages/hackthon/Score'
+import VoteList from '@/pages/vote/VoteList'
+import VoteDetail from '@/pages/vote/VoteDetail'
 import Start from '@/pages/Start'
+import Campaign from '@/pages/Campaign'
+import Login from '@/pages/Login'
+import UpdateCampaign from '@/pages/UpdateCampaign'
 
 Vue.use(Router)
 
@@ -22,10 +17,10 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Index
+      component: Home
     },
     {
-      path: '/start',
+      path: '/program',
       name: 'start',
       component: Start
     },
@@ -34,40 +29,45 @@ export default new Router({
       name: 'login',
       component: Login
     },
-    // {
-    //   path: '/programs',
-    //   name: 'vote-list',
-    //   component: VoteList
-    // },
-    // {
-    //   path: '/program/:id',
-    //   name: 'vote-program',
-    //   component: VoteDetail
-    // },
     {
-      path: '/vote',
-      name: 'vote',
-      component: Submit
+      path: '/campaign',
+      name: 'campaign',
+      component: Campaign
     },
+    {
+      path: '/programs',
+      name: 'vote-list',
+      component: VoteList
+    },
+    {
+      path: '/program/:id',
+      name: 'vote-program',
+      component: VoteDetail
+    },
+    {
+      path: '/campaign',
+      name: 'campaign',
+      component: UpdateCampaign
+    }
     // {
     //   path: '/vote',
     //   name: 'vote',
     //   component: Submit
     // },
-    {
-      path: '/programs',
-      name: 'programs',
-      component: Programs
-    },
-    {
-      path: '/program/statistics',
-      name: 'statistics',
-      component: Statistics
-    },
-    {
-      path: '/program/:id',
-      name: 'program',
-      component: Score
-    }
+    // {
+    //   path: '/programs',
+    //   name: 'programs',
+    //   component: Programs
+    // },
+    // {
+    //   path: '/program/statistics',
+    //   name: 'statistics',
+    //   component: Statistics
+    // },
+    // {
+    //   path: '/program/:id',
+    //   name: 'program',
+    //   component: Score
+    // }
   ]
 })

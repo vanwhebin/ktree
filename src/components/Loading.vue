@@ -23,7 +23,7 @@ export default {
   .loading-bar {
     width: 4.56rem;
     height: 1.41333rem;
-    background-image: url(../../assets/images/loading-outer@2x.png);
+    background-image: url(../assets/images/loading-outer@2x.png);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -32,7 +32,7 @@ export default {
   .processing {
     width: 4.05333rem;
     height: 0.8533rem;
-    background-image: url(../../assets/images/loading-bar@2x.png);
+    background-image: url(../assets/images/loading-bar@2x.png);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;

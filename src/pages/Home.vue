@@ -113,8 +113,8 @@
               <p>通过组合，打造出最适合自身团队的实践方案，让效率倍速提升</p>
             </div>
             <div class="features-box">
-              <div class="left-feature">
-                <a-card :border="false" :style="{border:'none'}">
+              <div class="left-feature" >
+                <a-card :border="false" :style="{border:'none'}" style="padding-top: 24px">
                   <a-card-grid style="text-align:center;margin:5px" class="feature-item">
                     <a-icon type="database" :style="{'font-size': '24px', 'margin-bottom': '10px'}"></a-icon>
                     <p>佰亿</p>
